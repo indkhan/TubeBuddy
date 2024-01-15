@@ -2,7 +2,7 @@ from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain.memory import ConversationSummaryBufferMemory
 from langchain.chat_models import ChatOpenAI
-from langchain.embeddings import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.document_loaders import YoutubeLoader
@@ -48,11 +48,9 @@ def loadembed(url):
     vectorstore_openAI = FAISS.from_documents(docsvec, embeddings)
     main_placeholder.text("Embedding Vector Started Building...✅✅✅")
 
-    with open("faiss_store_openai.pkl", "wb") as f:
-        pickle.dump(vectorstore_openAI, f)
+    vectorstore_openAI.save_local("vectorstore_openAI")
 
-    with open("faiss_store_openai.pkl", "rb") as f:
-        vectorstore = pickle.load(f)
+    vectorstore = FAISS.load_local("vectorstore_openAI", embeddings)
 
     main_placeholder.text("done ✅")
     main_placeholder.empty()
@@ -60,6 +58,7 @@ def loadembed(url):
     return vectorstore
 
 
+@st.cache_data
 def get_video_info(url):
     try:
         yt = YouTube(url)
