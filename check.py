@@ -99,9 +99,7 @@ def setup_rag_chain(vectorstore: Any) -> ConversationalRetrievalChain:
     
     Answer: Let's address this based on the information provided about the video.
     
-    {answer}
     
-    Is there anything else I can help you with regarding the video?
     """)
     
     chain = ConversationalRetrievalChain.from_llm(
@@ -187,12 +185,12 @@ col1, col2 = st.columns(2)
 with col1:
     if st.button("Clear Chat History"):
         st.session_state.chat_history = []
-        st.experimental_rerun()
+        st.rerun()
 with col2:
     if st.button("Reset App"):
         for key in list(st.session_state.keys()):
             del st.session_state[key]
-        st.experimental_rerun()
+        st.rerun()
 
 # Footer
 st.markdown("---")
